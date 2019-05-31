@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Conectar API</title>
+  </head>
+  <body>
+  	<div class="text-center">
+    <button class="btn container w-auto my-5" style="background-color: #24c1af; color: white;" onclick="traer()">Obtener</button>
+		<!--Aca se muestran los datos traidos-->
+		<div id="contenido">
+
+		</div>
+	</div>
+  </body>
+<script type="text/javascript">
+	var cont = document.querySelector("#contenido")
+	function traer()
+	{
+		fetch("https://randomuser.me/api/")
+		.then(res => res.json())
+		.then(data => {
+			console.log(data.results['0'])
+			cont.innerHTML = 
+			`
+			<img class="img-fluid rounded-circle" src="${data.results['0'].picture.large}">
+			<p>Nombre: ${data.results['0'].name.first}</p>
+			<p>Apellido: ${data.results['0'].name.last}</p>
+			`
+		})
+	}
+</script>
+</html>
