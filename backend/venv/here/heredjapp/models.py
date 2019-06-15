@@ -63,6 +63,7 @@ CICLOS = [
 
 ANIOS = [(i,i) for i in range(1, 11)]
 
+
 ORIENTACIONES = [
     ('informatica', 'Informatica'),
     ('produccion', 'Produccion Musical'),
@@ -89,7 +90,6 @@ class Alumno(models.Model):
     apellido = models.CharField(max_length=20)
     cara = models.TextField() #link a la imagen de la cara
     curso = models.ForeignKey(Curso, on_delete=models.PROTECT)
-    #faltas = models.ManyToManyField(Presentismo)
     libre = models.BooleanField(default=False)  #regular (false, 0) y libre (true, 1)
 
     def __str__(self):
@@ -129,3 +129,10 @@ class Presentismo(models.Model):
         if self.presente == True:
             return '%s presente' % (self.alumno)
         return '%s ausente' % (self.alumno)
+
+
+
+ROLES = [
+    ('profesor', 'Profesor'),
+    ('coordinador', 'Coordinador'),
+]
