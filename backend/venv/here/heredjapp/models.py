@@ -39,14 +39,13 @@ class Curso(models.Model):
     año = models.IntegerField(choices=AÑOS)
     letra = models.CharField(max_length=2)
     orientacion = models.CharField(max_length=20, choices=ORIENTACIONES)
-    #fkcoordinador --> es un profesor con materia = coordinador
-
-    #class Meta:
+    #fkcoordinador --> es un profesor con rol = coordinador
 
 
 ROLES = [
-    ('profesor', 'Profesor'),
     ('coordinador', 'Coordinador'),
+    ('profesor', 'Profesor'),
+    ('suplente', 'Suplente'),
 ]
 
 class Profesor(models.Model):
@@ -55,3 +54,6 @@ class Profesor(models.Model):
     apellido = models.CharField(max_length=20, blank=True, default='')
     rol = models.CharField(max_length=20, choices=ROLES)
     #list de materias o un multipleselect https://pypi.org/project/django-multiselectfield/
+
+class Faltas(models.Model):
+    alumno = models.
