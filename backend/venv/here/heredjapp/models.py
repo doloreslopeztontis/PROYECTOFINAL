@@ -78,9 +78,6 @@ class Curso(models.Model):
     anio = models.IntegerField(choices=ANIOS)
     letra = models.CharField(max_length=2)
     orientacion = models.CharField(max_length=20, choices=ORIENTACIONES)
-<<<<<<< HEAD
-    #fkcoordinador --> es un profesor con rol = coordinador
-=======
     coordinador = models.ForeignKey(Profesor, null=True, on_delete=models.SET_NULL) #un profesor con materia = coordinador
 
     def __str__(self):
@@ -132,25 +129,3 @@ class Presentismo(models.Model):
         if self.presente == True:
             return '%s presente' % (self.alumno)
         return '%s ausente' % (self.alumno)
-
->>>>>>> 4d0fe5ea0fbd79c167874351d40bed7711853166
-
-
-ROLES = [
-    ('coordinador', 'Coordinador'),
-    ('profesor', 'Profesor'),
-    ('suplente', 'Suplente'),
-]
-<<<<<<< HEAD
-
-class Profesor(models.Model):
-    dni = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=20, blank=True, default='')
-    apellido = models.CharField(max_length=20, blank=True, default='')
-    rol = models.CharField(max_length=20, choices=ROLES)
-    #list de materias o un multipleselect https://pypi.org/project/django-multiselectfield/
-
-class Faltas(models.Model):
-    alumno = models.
-=======
->>>>>>> 4d0fe5ea0fbd79c167874351d40bed7711853166

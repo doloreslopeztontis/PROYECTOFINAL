@@ -25,11 +25,10 @@ SECRET_KEY = 'tsmb%!qeojc6&nv*3z3bo%gr2o^7x6)ir1+xs&_a1i2m-e73!@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'heredjapp.apps.HeredjappConfig',
     'rest_framework',

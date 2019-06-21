@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db import models
-from here.heredjapp.models import Alumno, Curso, Profesor, Materia, Clase, Bloque, Presentismo
+from heredjapp.models import Alumno, Curso, Profesor, Materia, Clase, Bloque, Presentismo
 
 
 
