@@ -55,7 +55,9 @@ ROOT_URLCONF = 'here.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'heredjapp/templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

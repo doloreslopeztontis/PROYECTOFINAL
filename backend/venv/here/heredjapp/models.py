@@ -50,7 +50,6 @@ class Profesor(models.Model):
     apellido = models.CharField(max_length=20, blank=True, default='')
     rol = models.CharField(max_length=20, choices=ROLES)
     materias = models.ManyToManyField(Materia)
-    #fklist de materias o un multipleselect https://pypi.org/project/django-multiselectfield/
 
     def __str__(self):
         return '%s %s' % (self.nombre, self.apellido)

@@ -3,7 +3,6 @@ from django.db import models
 from heredjapp.models import Alumno, Curso, Profesor, Materia, Clase, Bloque, Presentismo
 
 
-
 class MateriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Materia
@@ -11,6 +10,8 @@ class MateriaSerializer(serializers.ModelSerializer):
 
 
 class ProfesorSerializer(serializers.ModelSerializer):
+    materias = MateriaSerializer(many=True, read_only=False)
+
     class Meta:
         model = Profesor
         fields = ('dni', 'nombre', 'apellido', 'rol', 'materias')
