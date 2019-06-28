@@ -40,6 +40,7 @@ class Materia(models.Model):
 
 
 ROLES = [
+    ('suplente', 'Suplente'),
     ('profesor', 'Profesor'),
     ('coordinador', 'Coordinador'),
 ]
@@ -77,7 +78,7 @@ class Curso(models.Model):
     anio = models.IntegerField(choices=ANIOS)
     letra = models.CharField(max_length=2)
     orientacion = models.CharField(max_length=20, choices=ORIENTACIONES)
-    coordinador = models.ForeignKey(Profesor, null=True, on_delete=models.SET_NULL) #un profesor con materia = coordinador
+    coordinador = models.ForeignKey(Profesor, null=True, on_delete=models.SET_NULL) #un profesor con rol = coordinador
 
     def __str__(self):
         return '%s° %s %s' % (self.año, self.orientacion, self.letra)
@@ -121,7 +122,7 @@ class Clase(models.Model):
 class Presentismo(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
     time_stamp = models.TimeField(auto_now_add=True)
-    presente = models.BooleanField(default=False)
+    falta = models.FloatField(default=0)
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE)
 
     def __str__(self):

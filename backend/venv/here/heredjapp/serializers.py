@@ -10,12 +10,19 @@ class MateriaSerializer(serializers.ModelSerializer):
 
 
 class ProfesorSerializer(serializers.ModelSerializer):
-    materias = MateriaSerializer(many=True, read_only=False)
+    materias = MateriaSerializer(read_only=False, many=True)
 
     class Meta:
         model = Profesor
         fields = ('dni', 'nombre', 'apellido', 'rol', 'materias')
 
+    def create(self, validated_data):
+        materias = validated_data.pop('materias')
+        album = Profesor.objects.create(validated_data)
+
+        for materia in materias:
+            Materia.objects.create(materia)
+        return album
 
 class CursoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,4 +51,4 @@ class ClaseSerializer(serializers.ModelSerializer):
 class PresentismoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Presentismo
-        fields = ('alumno', 'time_stamp', 'presente', 'clase')
+        fields = ('alumno', 'time_stamp', 'falta', 'clase')

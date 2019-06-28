@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+import io
+
 
 from heredjapp.models import Materia, MATERIAS, DEPARTAMENTOS, Profesor
 from heredjapp.serializers import MateriaSerializer, ProfesorSerializer
@@ -16,12 +18,14 @@ def index(request):
 
 ##materia
 #listar
-@csrf_exempt
+@api_view(['GET'])
 def materia_list(request):
 
-    materias = Materia.objects.all()
-    serializer = MateriaSerializer(materias, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    if request.method == 'GET':
+        materias = Materia.objects.all()
+        serializer = MateriaSerializer(materias, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
 
 #traer
 @csrf_exempt
@@ -66,16 +70,23 @@ def profesor_list(request):
     return JsonResponse(serializer.data, safe=False)
 
 #insertar?
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def profesor_new(request):
 
-    profesor = Profesor()
-    profesor.nombre = "vicente"
-    profesor.apellido = "viloni"
-    profesor.dni = 34567854
-    profesor.rol = "profesor"
-    profesor.materias = [Materia.objects.get(id=1), Materia.objects.get(id=2)]
+    #profesor = Profesor()
+    #profesor.nombre = "vicente"
+    #profesor.apellido = "viloni"
+    #profesor.dni = 34567854
+    #profesor.rol = "profesor"
+    #profesor.save()
 
-    profesor.save()
-    serializer = ProfesorSerializer(profesor)
-    return JsonResponse(serializer.data, safe=False)
+    #profesor.materias.add(Materia.objects.get(id=1))
+    #profesor.materias.add(Materia.objects.get(id=2))
+
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = ProfesorSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.errors, status=400)

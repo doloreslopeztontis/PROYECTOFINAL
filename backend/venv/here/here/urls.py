@@ -24,6 +24,6 @@ urlpatterns = [
     path('materias/<int:id>', views.materia_detail),
     path('materias/materia=<nombre>&departamento=<departamento>', views.materia_new),
     path('profesores/', views.profesor_list),
-    path('profesornew', views.profesor_new)
+    path('profesores/profesornew', views.profesor_new)
 
 ]
