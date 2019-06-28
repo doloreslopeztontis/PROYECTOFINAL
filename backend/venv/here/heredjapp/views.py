@@ -28,36 +28,30 @@ def materia_list(request):
 
 
 #traer
-@csrf_exempt
+@api_view(['GET'])
 def materia_detail(request, id):
 
-    try:
-        materia = Materia.objects.get(id=id)
-    except Materia.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        try:
+            materia = Materia.objects.get(id=id)
+        except Materia.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = MateriaSerializer(materia)
-    return JsonResponse(serializer.data)
+        serializer = MateriaSerializer(materia)
+        return JsonResponse(serializer.data)
 
 #insertar
-@csrf_exempt
-def materia_new(request, nombre, departamento):
+@api_view(['POST'])
+def materia_new(request):
 
-    materia = Materia()
-
-    try:
-        materia.materia = nombre
-    except nombre in MATERIAS == False:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    try:
-        materia.departamento = departamento
-    except departamento in DEPARTAMENTOS == False:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    materia.save()
-    serializer = MateriaSerializer(materia)
-    return JsonResponse(serializer.data)
+    if request.method == 'POST':
+        #data = JSONParser().parse(request.body)
+        #serializer = MateriaSerializer(data=data)
+        serializer = MateriaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.errors, status=400)
 
 
 ##profesor
@@ -70,7 +64,7 @@ def profesor_list(request):
     return JsonResponse(serializer.data, safe=False)
 
 #insertar?
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def profesor_new(request):
 
     #profesor = Profesor()
@@ -84,7 +78,9 @@ def profesor_new(request):
     #profesor.materias.add(Materia.objects.get(id=2))
 
     if request.method == 'POST':
-        data = JSONParser().parse(request)
+        data = JSONParser().parse(request.body)
+        #return 'Data: "%s"' % data
+
         serializer = ProfesorSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
