@@ -7,10 +7,12 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 import io
+import random
 
 
 from heredjapp.models import Materia, MATERIAS, DEPARTAMENTOS, Profesor
 from heredjapp.serializers import MateriaSerializer, ProfesorSerializer
+
 
 
 def index(request):
@@ -28,17 +30,18 @@ def materia_list(request):
 
 
 #traer
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 def materia_detail(request, id):
 
-    if request.method == 'GET':
-        try:
-            materia = Materia.objects.get(id=id)
-        except Materia.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    try:
+        materia = Materia.objects.get(id=id)
+    except Materia.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+    if request.method == 'GET':
         serializer = MateriaSerializer(materia)
         return JsonResponse(serializer.data)
+
 
 #insertar
 @api_view(['POST'])
@@ -63,26 +66,58 @@ def profesor_list(request):
     serializer = ProfesorSerializer(profesores, many=True)
     return JsonResponse(serializer.data, safe=False)
 
-#insertar?
+#traer
+@api_view(['GET'])
+def profesor_detail(request, dni):
+
+    if request.method == 'GET':
+        try:
+            profesor = Profesor.objects.get(pk=dni)
+        except Profesor.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ProfesorSerializer(profesor)
+        return JsonResponse(serializer.data)
+
+#listar sus materias
+def profesor_materias(request, dni):
+    if request.method == 'GET':
+        try:
+            profesor = Profesor.objects.get(pk=dni)
+        except Profesor.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        materias = profesor.materias.all()
+        #materias = profesor.materias_set.all()
+        serializer = MateriaSerializer(materias, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+#:) xd
+
+#insertar
 @api_view(['POST'])
 def profesor_new(request):
 
-    #profesor = Profesor()
-    #profesor.nombre = "vicente"
-    #profesor.apellido = "viloni"
-    #profesor.dni = 34567854
-    #profesor.rol = "profesor"
-    #profesor.save()
-
-    #profesor.materias.add(Materia.objects.get(id=1))
-    #profesor.materias.add(Materia.objects.get(id=2))
-
     if request.method == 'POST':
         data = JSONParser().parse(request.body)
-        #return 'Data: "%s"' % data
-
         serializer = ProfesorSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, safe=False)
         return JsonResponse(serializer.errors, status=400)
+
+#insertar materias
+@api_view(['GET'])
+def profesor_new_materia(request, dni):
+    try:
+        profesor = Profesor.objects.get(pk=dni)
+    except Profesor.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        materias = Materia.objects.all()
+        materia = random.choice(materias)
+        materia.profesor_set.create(profesor)
+
+    serializer = ProfesorSerializer(profesor)
+    return JsonResponse(serializer.data)
